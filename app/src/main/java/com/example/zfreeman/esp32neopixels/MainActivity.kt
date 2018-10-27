@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
                     uiThread {
                         Log.wtf("Request", result)
                         longToast("Request performed")
-                        button.setText("Off")
+                        button.setText("On")
                     }
 
                 }
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                     uiThread {
                         Log.wtf("Request", result)
                         longToast("Request performed")
-                        button.setText("On")
+                        button.setText("Off")
                     }
                 }
             }
