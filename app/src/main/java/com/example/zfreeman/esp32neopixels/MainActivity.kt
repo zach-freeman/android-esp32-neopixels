@@ -10,14 +10,13 @@ import org.jetbrains.anko.uiThread
 import java.net.URL
 
 class MainActivity : AppCompatActivity() {
-    private var isLightOn = false
     private lateinit var button: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        button = findViewById<Button>(R.id.button)
+        button = findViewById(R.id.button)
         button.setOnClickListener {
             sendLightMessage()
         }
@@ -25,28 +24,32 @@ class MainActivity : AppCompatActivity() {
 
     private fun sendLightMessage()
     {
-        if (!isLightOn)
-        {
             doAsync{
-                val result = URL("http://espressif/lightOn").readText()
+                val statusResult = URL("http://espressif/lightStatus").readText()
                 uiThread {
-                    Log.d("Request", result)
+                    Log.wtf("Request", statusResult)
                     longToast("Request performed")
                 }
-            }
-            isLightOn = true
-            button.setText("On")
-        } else {
-            doAsync{
-                val result = URL("http://esprissif/lightOff").readText()
-                uiThread {
-                    Log.d("Request", result)
-                    longToast("Request performed")
+                if (statusResult == "On")
+                {
+                    val result = URL("http://espressif/lightOff").readText()
+                    uiThread {
+                        Log.wtf("Request", result)
+                        longToast("Request performed")
+                        button.setText("Off")
+                    }
+
+                }
+                else
+                {
+                    val result = URL("http://espressif/lightOn").readText()
+                    uiThread {
+                        Log.wtf("Request", result)
+                        longToast("Request performed")
+                        button.setText("On")
+                    }
                 }
             }
-            isLightOn = false
-            button.setText("Off")
-        }
 
     }
 }
