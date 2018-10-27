@@ -11,6 +11,12 @@ import java.net.URL
 
 class MainActivity : AppCompatActivity() {
     private lateinit var button: Button
+    companion object {
+        private const val SERVER_NAME = "espressif"
+        private const val LIGHT_STATUS_PATH = "lightStatus"
+        private const val LIGHT_ON_PATH = "lightOn"
+        private const val LIGHT_OFF_PATH = "lightOff"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,14 +31,14 @@ class MainActivity : AppCompatActivity() {
     private fun sendLightMessage()
     {
             doAsync{
-                val statusResult = URL("http://espressif/lightStatus").readText()
+                val statusResult = URL("http://$SERVER_NAME/$LIGHT_STATUS_PATH").readText()
                 uiThread {
                     Log.wtf("Request", statusResult)
                     longToast("Request performed")
                 }
                 if (statusResult == "On")
                 {
-                    val result = URL("http://espressif/lightOff").readText()
+                    val result = URL("http://$SERVER_NAME/$LIGHT_OFF_PATH").readText()
                     uiThread {
                         Log.wtf("Request", result)
                         longToast("Request performed")
@@ -42,7 +48,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 else
                 {
-                    val result = URL("http://espressif/lightOn").readText()
+                    val result = URL("http://$SERVER_NAME/$LIGHT_ON_PATH").readText()
                     uiThread {
                         Log.wtf("Request", result)
                         longToast("Request performed")
