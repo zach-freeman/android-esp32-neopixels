@@ -3,6 +3,9 @@ package com.example.zfreeman.esp32neopixels
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
 import android.widget.Switch
 import org.jetbrains.anko.doAsync
@@ -12,87 +15,43 @@ import java.net.URL
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var lightSwitch: Switch
-
-    companion object {
-        private const val SERVER_NAME = "espressif"
-        private const val LIGHT_STATUS_PATH = "lightStatus"
-        private const val LIGHT_ON_PATH = "lightOn"
-        private const val LIGHT_OFF_PATH = "lightOff"
-        private const val CHRISTMAS_PATH = "christmas"
-    }
-    private var isLightOn = false
+    private var devicesList: ArrayList<Device> = ArrayList()
+    private lateinit var linearLayoutManager: LinearLayoutManager
+    private lateinit var recyclerView : RecyclerView
+    private lateinit var adapter: DeviceAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        lightSwitch = findViewById(R.id.lightSwitch)
-        synchronizeSwitch()
-
-        lightSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-            sendLightMessage(isChecked)
-        }
-        christmasSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-            sendChristmasMessage(isChecked)
-        }
+        recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+        linearLayoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = linearLayoutManager
+        adapter = DeviceAdapter(devicesList)
+        recyclerView.adapter = adapter
+        setRecyclerViewItemTouchListener()
     }
 
-    private fun synchronizeSwitch() {
-        doAsync {
-            val statusResult = URL("http://$SERVER_NAME/$LIGHT_STATUS_PATH").readText()
+    override fun onStart()
+    {
+        super.onStart();
 
-            if (statusResult == "On") {
-                uiThread {
-                    lightSwitch.isChecked = true
-                }
+    }
 
-            } else {
-                uiThread {
-                    lightSwitch.isChecked = false
-                }
+    private fun setRecyclerViewItemTouchListener() {
+        val itemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, viewHolder1: RecyclerView.ViewHolder): Boolean {
+                //2
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+                //3
+                return;
             }
         }
+        val itemTouchHelper = ItemTouchHelper(itemTouchCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
-    private fun sendLightMessage(isChecked: Boolean) {
-        doAsync {
-            if (isChecked) {
-                val result = URL("http://$SERVER_NAME/$LIGHT_ON_PATH").readText()
-                uiThread {
-                    Log.wtf("Request", result)
-                    longToast("Light On")
-                    root_layout.setBackgroundColor(Color.GREEN)
-                }
 
-            } else {
-                val result = URL("http://$SERVER_NAME/$LIGHT_OFF_PATH").readText()
-                uiThread {
-                    Log.wtf("Request", result)
-                    longToast("Light Off")
-                    root_layout.setBackgroundColor(Color.LTGRAY)
-                }
-            }
-        }
-    }
-
-    private fun sendChristmasMessage(isChecked: Boolean) {
-        doAsync {
-            if (isChecked) {
-                val result = URL("http://$SERVER_NAME/$CHRISTMAS_PATH").readText()
-                uiThread {
-                    Log.wtf("Request", result)
-                    longToast("HO HO HO")
-                    root_layout.setBackgroundColor(Color.GREEN)
-                }
-
-        } else {
-            val result = URL("http://$SERVER_NAME/$LIGHT_OFF_PATH").readText()
-            uiThread {
-                Log.wtf("Request", result)
-                longToast("Light Off")
-                root_layout.setBackgroundColor(Color.LTGRAY)
-            }
-        }
-        }
-    }
 }

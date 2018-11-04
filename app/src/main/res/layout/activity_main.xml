@@ -8,28 +8,10 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity" tools:layout_editor_absoluteY="81dp">
 
-    <Switch
-            android:text="Light"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/lightSwitch"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp" android:layout_marginBottom="31dp"
-            app:layout_constraintEnd_toEndOf="@+id/christmasSwitch"
-            app:layout_constraintBottom_toTopOf="@+id/christmasSwitch"/>
-    <android.support.constraint.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                          android:id="@+id/guideline" app:layout_constraintGuide_begin="20dp"
-                                          android:orientation="vertical"/>
-    <android.support.constraint.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                          android:id="@+id/guideline2" app:layout_constraintGuide_begin="20dp"
-                                          android:orientation="horizontal"/>
-    <Switch
-            android:text="Christmas"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/christmasSwitch"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginBottom="230dp"/>
+    <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"/>
 
 </android.support.constraint.ConstraintLayout>
