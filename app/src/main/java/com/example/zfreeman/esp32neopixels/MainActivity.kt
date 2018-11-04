@@ -13,6 +13,7 @@ import org.jetbrains.anko.longToast
 import org.jetbrains.anko.uiThread
 import java.net.URL
 import kotlinx.android.synthetic.main.activity_main.*
+import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
     private var devicesList: ArrayList<Device> = ArrayList()
@@ -34,7 +35,16 @@ class MainActivity : AppCompatActivity() {
     override fun onStart()
     {
         super.onStart();
-
+        val homeDeviceJsonObject = JSONObject()
+        homeDeviceJsonObject.put(Device.DEVICE_NAME, "home")
+        homeDeviceJsonObject.put(Device.DEVICE_HOSTNAME, "espressif")
+        val homeDevice : Device = Device(homeDeviceJsonObject)
+        devicesList.add(homeDevice)
+        val workDeviceJsonObject = JSONObject()
+        workDeviceJsonObject.put(Device.DEVICE_NAME, "work")
+        workDeviceJsonObject.put(Device.DEVICE_HOSTNAME, "192.168.1.5")
+        val workDevice: Device = Device(workDeviceJsonObject)
+        devicesList.add(workDevice)
     }
 
     private fun setRecyclerViewItemTouchListener() {

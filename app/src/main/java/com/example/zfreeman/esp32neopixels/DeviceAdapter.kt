@@ -12,16 +12,17 @@ class DeviceAdapter(private val devices: ArrayList<Device>) : RecyclerView.Adapt
     }
 
     override fun getItemCount(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return devices.size
     }
 
     override fun onBindViewHolder(p0: DeviceAdapter.DeviceHolder, p1: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val itemDevice = devices[p1]
+        p0.bindDevice(itemDevice)
     }
 
     //1
     class DeviceHolder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
-        //2
+        private var device : Device? = null
         private var view: View = v
 
         //3
@@ -32,11 +33,17 @@ class DeviceAdapter(private val devices: ArrayList<Device>) : RecyclerView.Adapt
         //4
         override fun onClick(v: View) {
             Log.d("RecyclerView", "CLICK!")
+            val context = itemView.context
         }
 
+        fun bindDevice(device : Device) {
+            this.device = device
+            view.device_name.text = device.deviceName
+            view.device_hostname.text = device.deviceHostname
+        }
         companion object {
             //5
-            private val DEVICE_KEY = "PHOTO"
+            private val DEVICE_KEY = "DEVICE"
         }
     }
 

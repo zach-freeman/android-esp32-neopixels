@@ -8,19 +8,16 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class Device(photoJSON: JSONObject) : Serializable {
+class Device(deviceJSON: JSONObject) : Serializable {
 
-    private lateinit var photoDate: String
-    lateinit var explanation: String
-        private set
-    lateinit var url: String
+    lateinit var deviceName: String
+    lateinit var deviceHostname: String
         private set
 
     init {
         try {
-            photoDate = photoJSON.getString(PHOTO_DATE)
-            explanation = photoJSON.getString(PHOTO_EXPLANATION)
-            url = photoJSON.getString(PHOTO_URL)
+            deviceName = deviceJSON.getString(DEVICE_NAME)
+            deviceHostname = deviceJSON.getString(DEVICE_HOSTNAME)
         } catch (e: JSONException) {
             e.printStackTrace()
         }
@@ -28,8 +25,7 @@ class Device(photoJSON: JSONObject) : Serializable {
     }
 
     companion object {
-        private val PHOTO_DATE = "date"
-        private val PHOTO_EXPLANATION = "explanation"
-        private val PHOTO_URL = "url"
+        val DEVICE_NAME = "name"
+        val DEVICE_HOSTNAME = "hostname"
     }
 }
