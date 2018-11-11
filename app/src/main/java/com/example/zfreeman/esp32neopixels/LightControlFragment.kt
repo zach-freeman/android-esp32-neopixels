@@ -28,6 +28,8 @@ class LightControlFragment : Fragment() {
         private const val LIGHT_ON_PATH = "lightOn"
         private const val LIGHT_OFF_PATH = "lightOff"
         private const val CHRISTMAS_PATH = "christmas"
+
+        private var mServerName = ""
     }
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
@@ -36,6 +38,17 @@ class LightControlFragment : Fragment() {
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
             // Get the custom view for this fragment layout
             val view = inflater!!.inflate(R.layout.light_control_fragment, container, false)
+            val bundle = arguments
+            val device = bundle?.getSerializable("device")
+            if (device is Device) {
+                mServerName = device.deviceHostname
+            }
+            if (mServerName == "")
+            {
+                mServerName = SERVER_NAME
+            }
+
+
 
             // Get the text view widget reference from custom layout
             lightSwitch = view.findViewById<Switch>(R.id.light_switch)
@@ -80,7 +93,7 @@ class LightControlFragment : Fragment() {
 
         private fun synchronizeSwitch() {
             doAsync {
-                val statusResult = URL("http://$SERVER_NAME/$LIGHT_STATUS_PATH").readText()
+                val statusResult = URL("http://$mServerName/$LIGHT_STATUS_PATH").readText()
 
                 if (statusResult == "On") {
                     uiThread {
@@ -98,7 +111,7 @@ class LightControlFragment : Fragment() {
         private fun sendLightMessage(isChecked: Boolean) {
             doAsync {
                 if (isChecked) {
-                    val result = URL("http://$SERVER_NAME/$LIGHT_ON_PATH").readText()
+                    val result = URL("http://$mServerName/$LIGHT_ON_PATH").readText()
                     uiThread {
                         Log.wtf("Request", result)
                         //longToast("Light On")
@@ -106,7 +119,7 @@ class LightControlFragment : Fragment() {
                     }
 
                 } else {
-                    val result = URL("http://$SERVER_NAME/$LIGHT_OFF_PATH").readText()
+                    val result = URL("http://$mServerName/$LIGHT_OFF_PATH").readText()
                     uiThread {
                         Log.wtf("Request", result)
                         //longToast("Light Off")
@@ -119,7 +132,7 @@ class LightControlFragment : Fragment() {
         private fun sendChristmasMessage(isChecked: Boolean) {
             doAsync {
                 if (isChecked) {
-                    val result = URL("http://$SERVER_NAME/$CHRISTMAS_PATH").readText()
+                    val result = URL("http://$mServerName/$CHRISTMAS_PATH").readText()
                     uiThread {
                         Log.wtf("Request", result)
                         //longToast("HO HO HO")
@@ -127,7 +140,7 @@ class LightControlFragment : Fragment() {
                     }
 
                 } else {
-                    val result = URL("http://$SERVER_NAME/$LIGHT_OFF_PATH").readText()
+                    val result = URL("http://$mServerName/$LIGHT_OFF_PATH").readText()
                     uiThread {
                         Log.wtf("Request", result)
                         //longToast("Light Off")
