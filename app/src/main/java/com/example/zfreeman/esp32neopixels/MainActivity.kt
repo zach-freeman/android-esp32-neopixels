@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = linearLayoutManager
         adapter = DeviceAdapter(devicesList,  { deviceItem : Device -> deviceItemClicked(deviceItem) })
         recyclerView.adapter = adapter
-        setRecyclerViewItemTouchListener()
     }
 
     override fun onStart()
@@ -46,23 +45,6 @@ class MainActivity : AppCompatActivity() {
         workDeviceJsonObject.put(Device.DEVICE_HOSTNAME, "192.168.1.5")
         val workDevice: Device = Device(workDeviceJsonObject)
         devicesList.add(workDevice)
-    }
-
-    private fun setRecyclerViewItemTouchListener() {
-        val itemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, viewHolder1: RecyclerView.ViewHolder): Boolean {
-                //2
-                return false
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
-                //3
-                return;
-            }
-
-        }
-        val itemTouchHelper = ItemTouchHelper(itemTouchCallback)
-        itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
     private fun deviceItemClicked(deviceItem : Device) {

@@ -114,16 +114,12 @@ class LightControlFragment : Fragment() {
                     val result = URL("http://$mServerName/$LIGHT_ON_PATH").readText()
                     uiThread {
                         Log.wtf("Request", result)
-                        //longToast("Light On")
-                        root_layout.setBackgroundColor(Color.GREEN)
                     }
 
                 } else {
                     val result = URL("http://$mServerName/$LIGHT_OFF_PATH").readText()
                     uiThread {
                         Log.wtf("Request", result)
-                        //longToast("Light Off")
-                        root_layout.setBackgroundColor(Color.LTGRAY)
                     }
                 }
             }
@@ -135,16 +131,12 @@ class LightControlFragment : Fragment() {
                     val result = URL("http://$mServerName/$CHRISTMAS_PATH").readText()
                     uiThread {
                         Log.wtf("Request", result)
-                        //longToast("HO HO HO")
-                        root_layout.setBackgroundColor(Color.GREEN)
                     }
 
                 } else {
                     val result = URL("http://$mServerName/$LIGHT_OFF_PATH").readText()
                     uiThread {
                         Log.wtf("Request", result)
-                        //longToast("Light Off")
-                        root_layout.setBackgroundColor(Color.LTGRAY)
                     }
                 }
             }
