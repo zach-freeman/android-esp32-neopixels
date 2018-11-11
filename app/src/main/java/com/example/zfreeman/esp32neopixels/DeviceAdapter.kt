@@ -4,8 +4,12 @@ import android.view.ViewGroup
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import kotlinx.android.synthetic.main.device_row.view.*
+import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 
-class DeviceAdapter(private val devices: ArrayList<Device>) : RecyclerView.Adapter<DeviceAdapter.DeviceHolder>() {
+
+class DeviceAdapter(private val devices: ArrayList<Device>, val clickListener: (Device) -> Unit) : RecyclerView.Adapter<DeviceAdapter.DeviceHolder>() {
+
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): DeviceAdapter.DeviceHolder {
         val inflatedView = p0.inflate(R.layout.device_row, false)
         return DeviceHolder(inflatedView)
@@ -15,9 +19,9 @@ class DeviceAdapter(private val devices: ArrayList<Device>) : RecyclerView.Adapt
         return devices.size
     }
 
-    override fun onBindViewHolder(p0: DeviceAdapter.DeviceHolder, p1: Int) {
-        val itemDevice = devices[p1]
-        p0.bindDevice(itemDevice)
+    override fun onBindViewHolder(holder: DeviceAdapter.DeviceHolder, position: Int) {
+        val itemDevice = devices[position]
+        holder.bindDevice(itemDevice, clickListener)
     }
 
     //1
@@ -34,12 +38,14 @@ class DeviceAdapter(private val devices: ArrayList<Device>) : RecyclerView.Adapt
         override fun onClick(v: View) {
             Log.d("RecyclerView", "CLICK!")
             val context = itemView.context
+
         }
 
-        fun bindDevice(device : Device) {
+        fun bindDevice(device : Device, clickListener: (Device) -> Unit) {
             this.device = device
             view.device_name.text = device.deviceName
             view.device_hostname.text = device.deviceHostname
+            view.setOnClickListener { clickListener(device) }
         }
         companion object {
             //5

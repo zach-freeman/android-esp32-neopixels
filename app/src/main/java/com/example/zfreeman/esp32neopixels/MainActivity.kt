@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
 import android.widget.Switch
+import android.widget.Toast
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.uiThread
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         linearLayoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = linearLayoutManager
-        adapter = DeviceAdapter(devicesList)
+        adapter = DeviceAdapter(devicesList,  { deviceItem : Device -> deviceItemClicked(deviceItem) })
         recyclerView.adapter = adapter
         setRecyclerViewItemTouchListener()
     }
@@ -58,10 +59,25 @@ class MainActivity : AppCompatActivity() {
                 //3
                 return;
             }
+
         }
         val itemTouchHelper = ItemTouchHelper(itemTouchCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
     }
+
+    private fun deviceItemClicked(deviceItem : Device) {
+        Toast.makeText(this, "Clicked: ${deviceItem.deviceHostname}", Toast.LENGTH_LONG).show()
+        val fragment = LightControlFragment()
+        val args = Bundle()
+        args.putSerializable("device", deviceItem)
+        fragment.setArguments(args)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.recycler_view, fragment)
+            .addToBackStack(null)
+            .commit()
+
+    }
+
 
 
 }
