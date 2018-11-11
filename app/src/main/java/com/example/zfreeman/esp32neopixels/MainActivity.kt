@@ -72,9 +72,9 @@ class MainActivity : AppCompatActivity() {
         args.putSerializable("device", deviceItem)
         fragment.setArguments(args)
         supportFragmentManager.beginTransaction()
-            .replace(R.id.recycler_view, fragment)
+            .add(R.id.fragment_container, fragment)
             .addToBackStack(null)
-            .commit()
+            .commitAllowingStateLoss()
 
     }
 
