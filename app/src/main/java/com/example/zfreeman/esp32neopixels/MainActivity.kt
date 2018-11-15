@@ -34,12 +34,12 @@ class MainActivity : AppCompatActivity() {
         // adding inbuilt divider line
         recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
         recyclerView.adapter = adapter
+        initDeviceList()
     }
 
     override fun onStart()
     {
         super.onStart()
-        initDeviceList()
     }
 
     override fun onResume()
