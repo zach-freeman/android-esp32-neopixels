@@ -48,13 +48,21 @@ class MainActivity : AppCompatActivity() {
         super.onBackPressed()
         if (recyclerView.visibility == View.GONE) {
             recyclerView.visibility = View.VISIBLE
+            updateActionBarTitle("Esp32Neopixels")
+            hideNavigtion()
         } else {
             finish()
         }
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
     private fun deviceItemClicked(deviceItem : Device) {
-        Toast.makeText(this, "Clicked: ${deviceItem.deviceHostname}", Toast.LENGTH_LONG).show()
+        updateActionBarTitle(deviceItem.deviceName)
+        showNavigation()
         recyclerView.visibility = View.GONE
         val fragment = LightControlFragment()
         val args = Bundle()
@@ -81,6 +89,19 @@ class MainActivity : AppCompatActivity() {
         devicesList.add(workDevice)
     }
 
+    private fun updateActionBarTitle(title : CharSequence) {
+        (this as AppCompatActivity).supportActionBar?.title = title
 
+    }
+
+    private fun showNavigation() {
+        (this as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (this as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
+    }
+
+    private fun hideNavigtion() {
+        (this as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        (this as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(false)
+    }
 
 }
