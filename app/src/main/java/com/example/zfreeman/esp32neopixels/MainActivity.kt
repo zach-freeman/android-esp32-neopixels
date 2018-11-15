@@ -3,6 +3,7 @@ package com.example.zfreeman.esp32neopixels
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
@@ -30,6 +31,8 @@ class MainActivity : AppCompatActivity() {
         linearLayoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = linearLayoutManager
         adapter = DeviceAdapter(devicesList,  { deviceItem : Device -> deviceItemClicked(deviceItem) })
+        // adding inbuilt divider line
+        recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
         recyclerView.adapter = adapter
     }
 
@@ -48,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         super.onBackPressed()
         if (recyclerView.visibility == View.GONE) {
             recyclerView.visibility = View.VISIBLE
-            updateActionBarTitle("Esp32Neopixels")
+            updateActionBarTitle(getString(R.string.app_name))
             hideNavigtion()
         } else {
             finish()
