@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
+import android.view.View
 import android.widget.Switch
 import android.widget.Toast
 import org.jetbrains.anko.doAsync
@@ -34,7 +35,40 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart()
     {
-        super.onStart();
+        super.onStart()
+        initDeviceList()
+    }
+
+    override fun onResume()
+    {
+        super.onResume()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if (recyclerView.visibility == View.GONE) {
+            recyclerView.visibility = View.VISIBLE
+        } else {
+            finish()
+        }
+    }
+
+    private fun deviceItemClicked(deviceItem : Device) {
+        Toast.makeText(this, "Clicked: ${deviceItem.deviceHostname}", Toast.LENGTH_LONG).show()
+        recyclerView.visibility = View.GONE
+        val fragment = LightControlFragment()
+        val args = Bundle()
+        args.putSerializable("device", deviceItem)
+        fragment.setArguments(args)
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commitAllowingStateLoss()
+
+    }
+
+    private fun initDeviceList()
+    {
         val homeDeviceJsonObject = JSONObject()
         homeDeviceJsonObject.put(Device.DEVICE_NAME, "home")
         homeDeviceJsonObject.put(Device.DEVICE_HOSTNAME, "espressif")
@@ -45,19 +79,6 @@ class MainActivity : AppCompatActivity() {
         workDeviceJsonObject.put(Device.DEVICE_HOSTNAME, "192.168.1.5")
         val workDevice: Device = Device(workDeviceJsonObject)
         devicesList.add(workDevice)
-    }
-
-    private fun deviceItemClicked(deviceItem : Device) {
-        Toast.makeText(this, "Clicked: ${deviceItem.deviceHostname}", Toast.LENGTH_LONG).show()
-        val fragment = LightControlFragment()
-        val args = Bundle()
-        args.putSerializable("device", deviceItem)
-        fragment.setArguments(args)
-        supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .commitAllowingStateLoss()
-
     }
 
 
